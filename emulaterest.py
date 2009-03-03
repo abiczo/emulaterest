@@ -2,7 +2,8 @@ import re
 import cgi
 import cStringIO
 
-_FORM_RE = re.compile('<form([^<>]+)method="([a-zA-Z]+)"([^<>]*)>')
+_FORM_RE = re.compile('<form(\s[^>]*\s|\s)method="([a-zA-Z]+)"([^>]*)>',
+                      re.IGNORECASE)
 
 class EmulateRestMiddleware(object):
     """WSGI middleware to emulate PUT and DELETE requests.

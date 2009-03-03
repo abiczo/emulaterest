@@ -1,6 +1,6 @@
 from webtest import TestApp
 
-from emulaterest import EmulateRestMiddleware
+from emulaterest import EmulateRestMiddleware, _FORM_RE
 
 def make_app(status, headers, body):
     class ListWithClose(list):
@@ -128,3 +128,43 @@ def test_app_iter_close_called():
     resp = test_app.get('/')
 
     assert app.close_called
+
+def test_form_regex():
+    should_match = (
+        '<form method="POST">',
+        '\n<form method="POST">\t',
+        ' <form method="POST">',
+        '<form method="POST" > ',
+        ' <form  method="PUT"> ',
+        '<form\tmethod="PUT" id="form-id">',
+        '<form id="form-id" method="PUT">',
+        '<FORM ID="FORM-ID" METHOD="PuT">',
+        '<Form ID="FORM-ID" METHOD="put">',
+        '<form method="POST">',
+        '<form\tid="form-id"\t \nmethod="delete">',
+        '<form\t-\tmethod="POST">',
+    )
+
+    should_not_match = (
+        'x',
+        'form',
+        '<form>',
+        ' <form>',
+        '<form method="POST"',
+        '<form> method="POST"',
+        '<form > method="POST"',
+        '<form > method="POST">',
+        '<form> method="POST">',
+        '<form> <method="POST">',
+        '<form- method="POST">',
+        ' <form- method="POST">  ',
+        '<formmethod="POST">',
+        '<form-method="POST">',
+        '  <form-method="POST">',
+    )
+
+    for form in should_match:
+        assert _FORM_RE.search(form)
+
+    for form in should_not_match:
+        assert not _FORM_RE.search(form)
