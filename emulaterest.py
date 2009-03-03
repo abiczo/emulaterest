@@ -2,6 +2,8 @@ import re
 import cgi
 import cStringIO
 
+_FORM_RE = re.compile('<form([^<>]+)method="([a-zA-Z]+)"([^<>]*)>')
+
 class EmulateRestMiddleware(object):
     """WSGI middleware to emulate PUT and DELETE requests.
 
@@ -88,7 +90,6 @@ class EmulateRestMiddleware(object):
         # TODO: <input> vs. <input/> depending on doctype
         # TODO: make the name of the hidden input configurable
 
-        pattern = '<form([^<>]+)method="([a-zA-Z]+)"([^<>]*)>'
         repl_pattern = '<form%(g1)smethod="post"%(g3)s>' + \
             '<div style="display:none;"><input type="hidden"' + \
             'name="_method" value="%(g2)s"></div>'
@@ -102,4 +103,4 @@ class EmulateRestMiddleware(object):
             else:
                 return match.group(0)
 
-        return re.sub(pattern, repl, body)
+        return _FORM_RE.sub(repl, body)
