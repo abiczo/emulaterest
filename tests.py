@@ -163,6 +163,7 @@ def test_form_regex():
         '<formmethod="POST">',
         '<form-method="POST">',
         '  <form-method="POST">',
+        '<form xmethod="POST">',
     )
 
     for form in should_match:
