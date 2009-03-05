@@ -20,4 +20,10 @@ setup(name='emulaterest',
           'Topic :: Internet :: WWW/HTTP :: WSGI :: Middleware',
           'Topic :: Software Development :: Libraries :: Python Modules',
       ],
+      entry_points="""
+        [paste.filter_factory]
+        emulaterest = emulaterest:emulaterest_filter_factory
+        [paste.filter_app_factory]
+        emulaterest = emulaterest:emulaterest_filter_app_factory
+      """,
       )

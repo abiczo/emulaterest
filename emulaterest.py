@@ -125,3 +125,13 @@ class EmulateRestMiddleware(object):
                 return match.group(0)
 
         return _FORM_RE.sub(repl, body)
+
+def emulaterest_filter_factory(global_conf, **kwargs):
+    """Can be used as a paste filter factory"""
+    def filter(app):
+        return EmulateRestMiddleware(app, **kwargs)
+    return filter
+
+def emulaterest_filter_app_factory(app, global_conf, **kwargs):
+    """Can be used as a paste filter-app factory"""
+    return EmulateRestMiddleware(app, **kwargs)
