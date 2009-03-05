@@ -92,7 +92,7 @@ class EmulateRestMiddleware(object):
         # TODO: make the name of the hidden input configurable
 
         repl_pattern = '<form%(g1)smethod="post"%(g3)s>' + \
-            '<div style="display:none;"><input type="hidden"' + \
+            '<div style="display:none;"><input type="hidden" ' + \
             'name="_method" value="%(g2)s"></div>'
 
         def repl(match):

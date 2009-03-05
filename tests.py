@@ -55,6 +55,7 @@ def test_put_form():
 
     assert resp.status_int == 200
     assert resp.form.method.upper() == 'POST'
+    assert '<input type="hidden" name="_method" value="PUT">' in resp
     assert '_method' in resp.form.fields
     assert len(resp.form.fields['_method']) == 1
     assert resp.form.fields['_method'][0].value == 'PUT'
@@ -75,6 +76,7 @@ def test_delete_form():
 
     assert resp.status_int == 200
     assert resp.form.method.upper() == 'POST'
+    assert '<input type="hidden" name="_method" value="DELETE">' in resp
     assert '_method' in resp.form.fields
     assert len(resp.form.fields['_method']) == 1
     assert resp.form.fields['_method'][0].value == 'DELETE'
