@@ -88,6 +88,57 @@ def test_delete_form():
     assert not req.GET
     assert not req.POST
 
+def test_xhtml_mode():
+    body = """
+        <html><form method="PUT" action="/">
+            <input type="text" name="inp" value="val"/>
+        </form></html>
+        """
+    app = make_app('200 OK', [('Content-Type', 'application/xhtml+xml')], body)
+    app = TestApp(EmulateRestMiddleware(app))
+
+    resp = app.get('/')
+
+    assert resp.status_int == 200
+    assert resp.form.method.upper() == 'POST'
+    assert '<input type="hidden" name="_method" value="PUT"/>' in resp
+    assert '_method' in resp.form.fields
+    assert len(resp.form.fields['_method']) == 1
+    assert resp.form.fields['_method'][0].value == 'PUT'
+
+    resp = resp.form.submit()
+    req = resp.request
+
+    assert req.method == 'PUT'
+    assert not req.GET
+    assert 'inp' in req.POST and req.POST['inp'] == 'val'
+
+def test_forced_xhtml_mode():
+    body = """
+        <html><form method="PUT" action="/">
+            <input type="text" name="inp" value="val"/>
+        </form></html>
+        """
+    app = make_app('200 OK', [('Content-Type', 'text/html')], body)
+    app = TestApp(EmulateRestMiddleware(app, force_xhtml=True))
+
+    resp = app.get('/')
+
+    assert resp.status_int == 200
+    assert resp.form.method.upper() == 'POST'
+    assert '<input type="hidden" name="_method" value="PUT"/>' in resp
+    assert '_method' in resp.form.fields
+    assert len(resp.form.fields['_method']) == 1
+    assert resp.form.fields['_method'][0].value == 'PUT'
+
+    resp = resp.form.submit()
+    req = resp.request
+
+    assert req.method == 'PUT'
+    assert not req.GET
+    assert 'inp' in req.POST and req.POST['inp'] == 'val'
+
+
 def test_non_200_response():
     body = 'Not Found'
     app = make_app('404 Not Found', [('Content-Type', 'text/html')], body)

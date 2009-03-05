@@ -15,8 +15,21 @@ class EmulateRestMiddleware(object):
     It also intercepts incoming requests and does the inverse transformation.
     """
 
-    def __init__(self, app):
+    def __init__(self, app, force_xhtml=False):
+        """The possible options are:
+
+            ``force_xhtml``:
+                For documents served as text/html the default behaviour is
+                to insert HTML input tags (<input>). If you pass in
+                force_xhtml=True, then <input/> tags will be used instead.
+
+                If the document's content type is application/xhtml+xml, then
+                XML style input tags (<input/>) will be used regardless
+                of this parameter.
+        """
+
         self.app = app
+        self.force_xhtml = force_xhtml
 
     def __call__(self, environ, start_response):
         # Do the inverse transformation for the request first
@@ -62,7 +75,9 @@ class EmulateRestMiddleware(object):
             elif h[0].lower() == 'content-encoding':
                 content_encoding = h[1]
 
-        if not content_type or not content_type.startswith('text/html'):
+        if (not content_type or
+           (not content_type.startswith('text/html') and
+            not content_type.startswith('application/xhtml+xml'))):
             transform = False
 
         if content_encoding:
@@ -78,7 +93,10 @@ class EmulateRestMiddleware(object):
 
         if transform:
             # Do the transformation
-            response_body = self.emulate(response_body)
+            is_xhtml = (content_type.startswith('application/xhtml+xml') or
+                        self.force_xhtml)
+
+            response_body = self.emulate(response_body, is_xhtml)
             response_headers = [h for h in response_headers
                                 if h[0].lower() != 'content-length']
             response_headers.append(('Content-Length',
@@ -87,13 +105,15 @@ class EmulateRestMiddleware(object):
         start_response(status, response_headers, exc_info)
         return [response_body]
 
-    def emulate(self, body):
-        # TODO: <input> vs. <input/> depending on doctype
+    def emulate(self, body, is_xhtml):
         # TODO: make the name of the hidden input configurable
 
-        repl_pattern = '<form%(g1)smethod="post"%(g3)s>' + \
-            '<div style="display:none;"><input type="hidden" ' + \
-            'name="_method" value="%(g2)s"></div>'
+        close_str = ''
+        if is_xhtml:
+            close_str = '/'
+        repl_pattern = ('<form%(g1)smethod="post"%(g3)s>' +
+            '<div style="display:none;"><input type="hidden" ' +
+            'name="_method" value="%(g2)s"' + close_str + '></div>')
 
         def repl(match):
             if match.group(2).upper() in ('PUT', 'DELETE'):
