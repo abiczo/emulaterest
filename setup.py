@@ -11,4 +11,13 @@ setup(name='emulaterest',
       keywords='web wsgi rest',
       test_suite='nose.collector',
       tests_require=['nose>=0.10.4', 'WebTest>=1.1'],
+      classifiers=[
+          'Development Status :: 3 - Alpha',
+          'Environment :: Web Environment',
+          'Intended Audience :: Developers',
+          'License :: OSI Approved :: MIT License',
+          'Programming Language :: Python',
+          'Topic :: Internet :: WWW/HTTP :: WSGI :: Middleware',
+          'Topic :: Software Development :: Libraries :: Python Modules',
+      ],
       )
