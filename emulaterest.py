@@ -24,7 +24,7 @@ class EmulateRestMiddleware(object):
                 force_xhtml=True, then <input/> tags will be used instead.
 
                 If the document's content type is application/xhtml+xml, then
-                XML style input tags (<input/>) will be used regardless
+                XHTML style input elements (<input/>) will be used regardless
                 of this parameter.
         """
 

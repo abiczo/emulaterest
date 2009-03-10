@@ -1,4 +1,4 @@
-Emulaterest
+EmulateRest
 ===========
 
 WSGI middleware that does Rails style PUT and DELETE request emulation.
@@ -23,10 +23,12 @@ Install
 Notes
 -----
 
-* Emulaterest doesn't respect DOCTYPE declarations yet. If you use XHTML,
-  incorrect `<input>` tags will be injected.
+* For `text/html` documents the default behavior is to inject HTML style
+  `<input>` elements. You can tell EmulateRest to inject XHTML style
+  `<input/>` elements either by using the `force_xhtml` option or by
+  serving your documents as `application/xhtml+xml`.
 * If you are using a gzipping middleware or any other middleware that modifies
-  the content-encoding, make sure that emulaterest is wrapped in that
+  the content-encoding, make sure that EmulateRest is wrapped in that
   middleware and not the other way round.
 
 Example
