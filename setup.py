@@ -8,7 +8,7 @@ setup(name='emulaterest',
       license='MIT',
       version='0.1',
       py_modules=['emulaterest'],
-      keywords='web wsgi rest',
+      keywords='web wsgi middleware rest',
       test_suite='nose.collector',
       tests_require=['nose>=0.10.4', 'WebTest>=1.1'],
       classifiers=[
