@@ -16,7 +16,13 @@ request methods.
 
 Install
 =======
-::
+
+You can install EmulateRest from `PyPI <http://pypi.python.org/pypi>`_::
+
+    easy_install emulaterest
+
+or you can install the latest version from the
+`github repository <http://github.com/abiczo/emulaterest>`_::
 
     git clone git://github.com/abiczo/emulaterest.git
     cd emulaterest
