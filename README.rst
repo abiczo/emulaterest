@@ -1,12 +1,13 @@
+===========
 EmulateRest
 ===========
 
 WSGI middleware that does Rails style PUT and DELETE request emulation.
 
 The middleware intercepts the wrapped application's response and looks
-for forms with `method="PUT"` or `method="DELETE"`. For each such form
-it replaces the value of `method` with "POST" and adds a hidden input
-field `_method` that contains the original request method.
+for forms with ``method="PUT"`` or ``method="DELETE"``. For each such form
+it replaces the value of ``method`` with "POST" and adds a hidden input
+field ``_method`` that contains the original request method.
 It also intercepts incoming requests and does the inverse transformation.
 
 What this all means is that you can use PUT and DELETE forms in your
@@ -14,27 +15,29 @@ HTML code, without having to worry about browser support for these
 request methods.
 
 Install
--------
+=======
+::
 
     git clone git://github.com/abiczo/emulaterest.git
     cd emulaterest
     python setup.py install
 
 Notes
------
+=====
 
-* For `text/html` documents the default behavior is to inject HTML style
-  `<input>` elements. You can tell EmulateRest to inject XHTML style
-  `<input/>` elements either by using the `force_xhtml` option or by
-  serving your documents as `application/xhtml+xml`.
+* For ``text/html`` documents the default behavior is to inject HTML style
+  ``<input>`` elements. You can tell EmulateRest to inject XHTML style
+  ``<input/>`` elements either by using the ``force_xhtml`` option or by
+  serving your documents as ``application/xhtml+xml``.
+
 * If you are using a gzipping middleware or any other middleware that modifies
   the content-encoding, make sure that EmulateRest is wrapped in that
   middleware and not the other way round.
 
 Example
--------
+=======
 
-A complete working example using [web.py][web.py]:
+A complete working example using `web.py <http://webpy.org>`_::
 
     import web
 
@@ -60,5 +63,3 @@ A complete working example using [web.py][web.py]:
         import emulaterest
         app = web.application(urls, globals())
         app.run(emulaterest.EmulateRestMiddleware)
-
-[web.py]: http://webpy.org

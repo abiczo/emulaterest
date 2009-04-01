@@ -1,7 +1,10 @@
 from setuptools import setup
 
+long_description = open('README.rst').read()
+
 setup(name='emulaterest',
       description = 'WSGI middleware to emulate PUT and DELETE requests',
+      long_description=long_description,
       author='Andras Biczo',
       author_email='abiczo@gmail.com',
       url='http://github.com/abiczo/emulaterest',
