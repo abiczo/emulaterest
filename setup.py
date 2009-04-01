@@ -3,7 +3,7 @@ from setuptools import setup
 long_description = open('README.rst').read()
 
 setup(name='emulaterest',
-      description = 'WSGI middleware to emulate PUT and DELETE requests',
+      description='WSGI middleware that does Rails style PUT and DELETE request emulation',
       long_description=long_description,
       author='Andras Biczo',
       author_email='abiczo@gmail.com',
