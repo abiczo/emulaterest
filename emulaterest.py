@@ -47,7 +47,7 @@ class EmulateRestMiddleware(object):
             # Reset the stream so that others can read from it later
             environ['wsgi.input'].seek(0)
 
-            if '_method' in fs:
+            if fs and '_method' in fs:
                 method = fs['_method'].value
                 if method.upper() in ('PUT', 'DELETE'):
                     # TODO: remove '_method' from environ['wsgi.input']
